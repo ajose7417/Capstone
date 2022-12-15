@@ -4,13 +4,9 @@
 	
 	if(isset($_POST['submit']))
 	{	
-		$fname = $_POST['fname'];
-		$fname = stripslashes($fname);
-		$fname = addslashes($fname);
-
-		$lname = $_POST['lname'];
-		$lname = stripslashes($lname);
-		$lname = addslashes($lname);
+		$name = $_POST['name'];
+		$name = stripslashes($name);
+		$name = addslashes($name);
 
 		$email = $_POST['email'];
 		$email = stripslashes($email);
@@ -23,8 +19,7 @@
 		$prov = $_POST['prov'];
 		$prov = stripslashes($prov);
 		$prov = addslashes($prov);
-
-		$str="SELECT user_name from users WHERE user_name='$email'";
+		$str="SELECT email from user WHERE email='$email'";
 		$result=mysqli_query($con,$str);
 		
 		if((mysqli_num_rows($result))>0)	
@@ -34,13 +29,14 @@
         }
 		else
 		{
-            $str="insert into users set fname='$fname', lname='$lname',user_name='$email',password='$password',province='$prov',type=2";
+            $str="insert into user set name='$name',email='$email',password='$password',province='$prov',attempts=0";
 			if((mysqli_query($con,$str)))	
 			echo "<center><h3><script>alert('Congrats.. You have successfully registered !!');</script></h3></center>";
-			header('location: welcome.php');
+			header('location: welcome.php?q=1');
 		}
     }
 ?>
+
 <!DOCTYPE html>
 <html>
 	<head>
@@ -54,19 +50,12 @@
         <style type="text/css">
             body{
                   width: 100%;
-                  background: url(image/book.jpg) ;
+                  background: url(image/book.png) ;
                   background-position: center center;
                   background-repeat: no-repeat;
                   background-attachment: fixed;
                   background-size: cover;
                 }
-				.responsive {
-                width: 60px;
-                height: 60px;
-                }
-				.logohover:hover{
-					color:red;
-				}
           </style>
 	</head>
 
@@ -76,15 +65,15 @@
 				<div class="box-wrapper">				
 					<div class="box box-border">
 						<div class="box-body">
-							<center> <h5 style="font-family: Noto Sans;">Register to </h5><a href="index.php"><h4 style="font-family: Noto Sans;"><span class="logohover">Live<span><img class="responsive" src="image/leaf.png"></span>CAN</span></h4></a></center><br>
+						<center>
+							<h5 style="font-family: Noto Sans;">Register to </h5><a href="index.php">
+								<h4 style="font-family: Noto Sans;"><span class="logohover">Live<span><img class="responsive" src="LiveCAN/image/leaf.png" width="80" height="80"></span>CAN</span></h4>
+							</a>
+						</center><br>
 							<form method="post" action="register.php" enctype="multipart/form-data">
                                 <div class="form-group">
-									<label>Enter Your First Name:</label>
-									<input type="text" name="fname" class="form-control" required />
-								</div>
-								<div class="form-group">
-									<label>Enter Your Last Name:</label>
-									<input type="text" name="lname" class="form-control" required />
+									<label>Enter Your Username:</label>
+									<input type="text" name="name" class="form-control" required />
 								</div>
 								<div class="form-group">
 									<label>Enter Your Email Id:</label>
@@ -95,7 +84,7 @@
 									<input type="password" name="password" class="form-control" required />
                                 </div>
 								<div class="form-group">
-									<label>Enter Your Province:</label>
+									<label>Your Province:</label>
 									<select class="form-control" name="prov" required>
 										<option value="">--Select--</option>
 										<?php 
