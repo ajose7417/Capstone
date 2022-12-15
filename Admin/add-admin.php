@@ -221,23 +221,27 @@
                   <h3 class="box-title">Add Admin</h3>
                 </div><!-- /.box-header -->
                 <!-- form start -->
-                <form role="form">
+                
                   <div class="box-body">
                     <div class="form-group">
                       <label for="exampleInputEmail1">Email address</label>
-                      <input type="email" class="form-control" id="exampleInputEmail1" placeholder="Enter email">
+                      <input type="email" class="form-control" id="email" placeholder="Enter email">
                     </div>
                     <div class="form-group">
                       <label for="exampleInputPassword1">Password</label>
-                      <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Password">
+                      <input type="password" class="form-control" id="password" placeholder="Password">
                     </div>
                     
                   </div><!-- /.box-body -->
 
                   <div class="box-footer">
-                    <button type="submit" class="btn btn-primary">Submit</button>
+                    <button class="btn btn-primary" id="add-admin">Submit</button>
+                    <div id='add-response' style="display:none;">
+                      <br>
+                    <span style= "font-size:16px;" id="res-span"></span>
+                    <div>
                   </div>
-                </form>
+                
               </div><!-- /.box -->
 
         </section><!-- /.content -->
@@ -261,5 +265,39 @@
     <script src='plugins/fastclick/fastclick.min.js'></script>
     <!-- AdminLTE App -->
     <script src="dist/js/app.min.js" type="text/javascript"></script>
+
+    <script type="text/javascript" language="javascript">  
+  
+   $("#add-admin").click(function(){  
+      var email = $("#email").val();  
+      var password = $("#password").val(); 
+      var testEmail = /^[A-Z0-9._%+-]+@([A-Z0-9-]+\.)+[A-Z]{2,4}$/i;
+      if(email==""){
+        alert("Email must not be empty");
+      }
+      else if(!testEmail.test(email)) {
+        alert("Enter a valid email");
+      }
+      else if(password=="") {
+        alert("Password must not be empty");
+      }
+      else {
+      $.ajax({  
+         type:"POST", 
+         url:"admin-add.php",  
+         data:"email="+email+'&password='+password,
+         success:function(response){
+          $("#email").val('');
+          $("#password").val('');
+          $("#add-response").show();
+          $("#res-span").html(response); 
+
+         }  
+      });  
+    }
+   });  
+  
+</script>  
+
   </body>
 </html>

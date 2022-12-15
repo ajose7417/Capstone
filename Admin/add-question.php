@@ -221,35 +221,58 @@
                   <h3 class="box-title">Add Question</h3>
                 </div><!-- /.box-header -->
                 <!-- form start -->
-                <form role="form">
+                
                   <div class="box-body">
                     <div class="form-group">
                       <label for="exampleInputEmail1">Question</label>
-                      <input type="email" class="form-control" id="exampleInputEmail1" placeholder="Enter Question">
+                      <input type="text" class="form-control" id="question" placeholder="Enter Question">
                     </div>
                     <div class="form-group">
                       <label for="exampleInputPassword1">Options</label>
-                      <input type="text" class="form-control" id="exampleInputPassword1" placeholder="Option1">
-                      <input type="text" class="form-control" id="exampleInputPassword1" placeholder="Option2">
-                      <input type="text" class="form-control" id="exampleInputPassword1" placeholder="Option3">
-                      <input type="text" class="form-control" id="exampleInputPassword1" placeholder="Option4">
+                      <input type="text" class="form-control" id="op1" placeholder="Option1">
+                      <input type="text" class="form-control" id="op2" placeholder="Option2">
+                      <input type="text" class="form-control" id="op3" placeholder="Option3">
+                      <input type="text" class="form-control" id="op4" placeholder="Option4">
                     </div>
                     <div class="form-group">
-                      <label for="exampleInputPassword1">Correct Answer</label>
-                      <select class="form-control" id="exampleInputPassword1">
-                        <option>1</option>
-                        <option>2</option>
-                        <option>3</option>
-                        <option>4</option>
+                      <label for="correct">Correct Answer</label>
+                      <select class="form-control" id="correct">
+                        <option value='1'>1</option>
+                        <option value='2'>2</option>
+                        <option value='3'>3</option>
+                        <option value='4'>4</option>
+                      </select>
+                    </div>
+
+                    <div class="form-group">
+                      <label for="correct">Province</label>
+                      <select class="form-control" id="province">
+                        <?php 
+                        require('../database.php');
+                        
+										$str = "SELECT * FROM province";
+										$result = mysqli_query($con,$str);
+										while($row=mysqli_fetch_array($result) )
+                        					{
+                            					$name= $row['name'];
+												$provid= $row['id'];
+												?>
+											<option value="<?php echo $provid ?>"><?php echo $name; ?></option>
+												<?php
+											}
+										?>
                       </select>
                     </div>
                     
                   </div><!-- /.box-body -->
 
                   <div class="box-footer">
-                    <button type="submit" class="btn btn-primary">Submit</button>
+                    <button class="btn btn-primary" id='submit'>Submit</button>
+                  <div id='add-response' style="display:none;">
+                      <br>
+                    <span style= "font-size:16px;" id="res-span"></span>
+                    <div>
                   </div>
-                </form>
               </div><!-- /.box -->
 
         </section><!-- /.content -->
@@ -273,5 +296,49 @@
     <script src='plugins/fastclick/fastclick.min.js'></script>
     <!-- AdminLTE App -->
     <script src="dist/js/app.min.js" type="text/javascript"></script>
+    <script>
+      $("#submit").click(function(){
+        var question = $("#question").val();  
+      var op1 = $("#op1").val(); 
+      var op2 = $("#op2").val(); 
+      var op3 = $("#op3").val(); 
+      var op4 = $("#op4").val(); 
+      var correct = $("#correct").val(); 
+      var prov = $("#province").val();
+      if(question==''){
+        alert("Enter a question");
+      }
+      else if(op1==''){
+        alert("Enter a option 1");
+      }
+      else if(op2==''){
+        alert("Enter a option 2");
+      }
+      else if(op3==''){
+        alert("Enter a option 3");
+      }
+      else if(op4==''){
+        alert("Enter a option 4");
+      }
+      else{
+        $.ajax({  
+         type:"POST", 
+         url:"question-add.php",  
+         data:"ques="+question+'&op1='+op1+'&op2='+op2+'&op3='+op3+'&op4='+op4+'&correct='+correct+'&prov='+prov,
+         success:function(response){
+          $("#question").val('');
+          $("#op1").val('');
+          $("#op2").val('');
+          $("#op3").val('');
+          $("#op4").val('');
+          $("#correct").val('1');
+          $("#add-response").show();
+          $("#res-span").html(response);
+
+         }  
+      }); 
+      }
+      });
+    </script>
   </body>
 </html>

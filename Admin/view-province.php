@@ -228,18 +228,21 @@
                       </tr>
                     </thead>
                     <tbody>
+                    <?php 
+                    include("../database.php");
+                    $count=1;
+										$str = "SELECT * FROM province";
+										$result = mysqli_query($con,$str);
+										while($row=mysqli_fetch_array($result) )
+                        					{ ?>
                       <tr>
-                        <td>1</td>
-                        <td>Camino 1.5</td>
+                        <td><?php echo $count; ?></td>
+                        <td><?php echo $row['name']; ?></td>
                       </tr>
-                      <tr>
-                        <td>2</td>
-                        <td>Netscape 7.2</td>
-                      </tr>
-                      <tr>
-                        <td>3</td>
-                        <td>Netscape Browser 8</td>
-                      </tr>
+                      <?php 
+                    $count++;
+                    } ?>
+                      
                       
                     </tbody>
                     <!-- <tfoot>

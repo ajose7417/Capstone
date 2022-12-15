@@ -226,24 +226,29 @@
                         <th>Sl.No</th>
                         <th>Email ID</th>
                         <th>Password</th>
+                        <th>Actions</th>
                       </tr>
                     </thead>
                     <tbody>
+                    <?php 
+                    include("../database.php");
+                    $count=1;
+										$str = "SELECT * FROM users WHERE type=1";
+										$result = mysqli_query($con,$str);
+										while($row=mysqli_fetch_array($result) )
+                        					{ ?>
                       <tr>
-                        <td>1</td>
-                        <td>Camino 1.5</td>
-                        <td>OSX.3+</td>
+                        <td><?php echo $count; ?></td>
+                        <td><?php echo $row['user_name']; ?></td>
+                        <!-- <td class='soft<?php echo $row['user_id']; ?>'><input type="email" class="form-control" id="email<?php echo $row['user_id']; ?>" value="<?php echo $row['user_name']; ?>" placeholder="Enter email"></td> -->
+                        <td class=' hard hard<?php echo $row['user_id']; ?>'><?php echo $row['password']; ?></td>
+                        <td class='soft soft<?php echo $row['user_id']; ?>'><input type="text" class="form-control" id="password<?php echo $row['user_id']; ?>" value="<?php echo $row['password']; ?>" placeholder="Password"></td>
+                        <td class='hard hard<?php echo $row['user_id']; ?>'><i class="fa fa-edit edit-admin" alt='<?php echo $row['user_id']; ?>'></i>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<i class="fa fa-trash delete-admin" alt='<?php echo $row['user_id']; ?>'></i></td>
+                        <td class='soft soft<?php echo $row['user_id']; ?>'><button class='btn save' alt='<?php echo $row['user_id']; ?>'>Save</button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<button class='btn cancel' alt='<?php echo $row['user_id']; ?>'>Cancel</button>
                       </tr>
-                      <tr>
-                        <td>2</td>
-                        <td>Netscape 7.2</td>
-                        <td>Win 95+ / Mac OS 8.6-9.2</td>
-                      </tr>
-                      <tr>
-                        <td>3</td>
-                        <td>Netscape Browser 8</td>
-                        <td>Win 98SE+</td>
-                      </tr>
+                      <?php 
+                    $count++;
+                    } ?>
                       
                     </tbody>
                     <!-- <tfoot>
@@ -280,5 +285,62 @@
     <script src='plugins/fastclick/fastclick.min.js'></script>
     <!-- AdminLTE App -->
     <script src="dist/js/app.min.js" type="text/javascript"></script>
+    <script>
+      $(document).ready(function(){
+        $(".hard").show();
+        $(".soft").hide();
+
+
+        $(".edit-admin").click(function(){  
+          var userid    =   $(this).attr('alt');
+          $(".hard"+userid).hide();
+          $(".soft"+userid).show();
+        });
+
+
+        $(".save").click(function(){  
+          var userid    =   $(this).attr('alt');
+          // var email = $("#email"+userid).val();  
+          var password = $("#password"+userid).val();
+      if(password=="") {
+        alert("Password must not be empty");
+      }
+      else {
+      $.ajax({  
+         type:"POST", 
+         url:"update-admin.php",  
+         data:'password='+password+'&userid='+userid,
+         success:function(data){
+          location.reload();
+
+
+         }  
+      });  
+    }
+        });
+
+
+        $(".cancel").click(function(){
+          $(".hard").show();
+          $(".soft").hide();
+
+        });
+
+        $(".delete-admin").click(function(){  
+          var userid    =   $(this).attr('alt');
+          $.ajax({  
+         type:"POST", 
+         url:"delete-admin.php",  
+         data:'userid='+userid,
+         success:function(data){
+          location.reload();
+
+
+         }  
+      });
+        });
+
+      });
+    </script>
   </body>
 </html>

@@ -232,30 +232,26 @@
                       </tr>
                     </thead>
                     <tbody>
+                    <?php 
+                    include("../database.php");
+                    $count=1;
+										$str = "SELECT * FROM users LEFT OUTER JOIN province ON users.province=province.id WHERE users.type=2";
+										$result = mysqli_query($con,$str);
+										while($row=mysqli_fetch_array($result) )
+                        					{ ?>
                       <tr>
-                        <td>1</td>
-                        <td>Camino 1.5</td>
-                        <td>OSX.3+</td>
-                        <td>1</td>
-                        <td>Camino 1.5</td>
-                        <td>OSX.3+</td>
+                        <td><?php echo $count; ?></td>
+                        <td><?php echo $row['fname']; ?></td>
+                        <td><?php echo $row['lname']; ?></td>
+                        <td><?php echo $row['user_name']; ?></td>
+                        <td><?php echo $row['password']; ?></td>
+                        <td><?php echo $row['name']; ?></td>
                       </tr>
-                      <tr>
-                        <td>2</td>
-                        <td>Netscape 7.2</td>
-                        <td>Win 95+ / Mac OS 8.6-9.2</td>
-                        <td>1</td>
-                        <td>Camino 1.5</td>
-                        <td>OSX.3+</td>
-                      </tr>
-                      <tr>
-                        <td>3</td>
-                        <td>Netscape Browser 8</td>
-                        <td>Win 98SE+</td>
-                        <td>1</td>
-                        <td>Camino 1.5</td>
-                        <td>OSX.3+</td>
-                      </tr>
+                      <?php 
+                    $count++;
+                    } ?>
+                      
+                      
                       
                     </tbody>
                     <!-- <tfoot>
